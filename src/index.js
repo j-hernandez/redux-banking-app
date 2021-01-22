@@ -20,34 +20,53 @@ import { createStore } from 'redux';
 
 console.log('Starting up React App');
 
+const ACTION_DEPOSIT = 'deposti';
+const ACTION_WITHDRAW = 'withdarw';
+
 const defaultState = {
-  balance: 0
+  checking: 100,
+  savings: 100,
+  retirement: 100,
+  emergency: 100
 }
 
-// Increment
-const incrementAction = {
-  type: 'increment'
+// Deposit
+function createDeposit(account, amount) {
+  return {
+    type: ACTION_DEPOSIT,
+    payload: {
+      account: account,
+      amount: amount
+    }
+  }
 }
 
-// Decrement
-const decrementAction = {
-  type: 'decrement'
+// Withdrawal
+function createWithdrawal(account, amount) {
+  return {
+    type: ACTION_WITHDRAW,
+    payload: {
+      account,
+      amount
+    }
+  }
 }
 
 // Reducer - the function that returns a modified copy of your app state
-
 function account(state = defaultState, action) {
+  // access to action.type
+  // access to action.payload
   switch (action.type) {
-    case 'increment':
+    case ACTION_DEPOSIT:
       return {
-        balance: state.balance + 1
+        ...state,
+        [action.payload.account]: state[action.payload.account] || 0 + action.payload.amount
       }
-    case 'decrement':
+    case ACTION_WITHDRAW:
       return {
-        balance: state.balance - 1
+        ...state,
+        [action.payload.account]: state[action.payload.account] || 0 - action.payload.amount
       }
-    case 'multiply':
-      return state;
     default: 
     return state
   }
@@ -64,5 +83,5 @@ store.subscribe(() => {
 })
 
 window.store = store;
-window.incrementAction = incrementAction;
-window.decrementAction = decrementAction;
+window.createDeposit = createDeposit;
+window.createWithdrawal = createWithdrawal;
